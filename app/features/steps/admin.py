@@ -5,7 +5,7 @@ from behave import (
     then,
 )
 from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
+from django.test import Client
 
 use_step_matcher("re")
 
