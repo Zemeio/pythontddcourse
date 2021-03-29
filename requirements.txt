@@ -4,3 +4,4 @@ flake8
 behave_django
 behave
 flake8-per-file-ignores
+psycopg2
