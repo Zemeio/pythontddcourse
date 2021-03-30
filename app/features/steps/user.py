@@ -143,6 +143,7 @@ def step_impl(context):
         new_user = get_user_model().objects.create_user(
             email=email,
             password=password,
+            name=user,
         )
         context.users[email] = new_user
 
@@ -175,3 +176,23 @@ def step_impl(context, email):
         email=email
     ).exists()
     context.test_case.assertFalse(user_exists, "User should not exist %s" % email)
+
+
+@step('User "{email}" has name "{username}"')
+def step_impl(context, email, username):
+    """
+    :type context: behave.runner.Context
+    """
+    user = get_user_model().objects.filter(email=email).first()
+
+    context.test_case.assertEqual(user.name, username)
+
+
+@step('User "{email}" has password "{password}"')
+def step_impl(context, email, password):
+    """
+    :type context: behave.runner.Context
+    """
+    user = get_user_model().objects.filter(email=email).first()
+
+    context.test_case.assertTrue(user.check_password(password))

@@ -4,6 +4,7 @@ from behave import (
     use_step_matcher
 )
 from django.urls import reverse
+from rest_framework import status
 
 use_step_matcher("cfparse")
 
@@ -49,3 +50,12 @@ def step_impl(context):
     """
     context.absolute_url = reverse("admin:core_user_add")
     context.url_response = context.test_client.get(context.absolute_url)
+
+
+@then("I get a 405 METHOD NOT ALLOWED response")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    context.test_case.assertEqual(context.url_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED,
+                                  "Expected 405 METHOD NOT ALLOWED, but got %d" % context.url_response.status_code)

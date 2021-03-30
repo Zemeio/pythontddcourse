@@ -6,6 +6,7 @@ from behave import (
 )
 from django.contrib.auth import get_user_model
 from django.test import Client
+from rest_framework.test import APIClient
 
 use_step_matcher("re")
 
@@ -49,3 +50,11 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     context.test_case.assertContains(context.url_response, context.regular_user)
+
+
+@given("I have an API test client")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    context.test_client = APIClient()

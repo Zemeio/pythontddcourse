@@ -1,4 +1,3 @@
-@wip
 Feature: Token test feature
 
   Background:

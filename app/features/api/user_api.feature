@@ -33,3 +33,7 @@ Feature: Test user API
       | user@email.com | user     | pw       |
     Then I get a 400 BAD REQUEST response
     And The user "user@email.com" does not exist in my model
+
+  Scenario: Retrieve user should return error if unauthorized
+    When I call the ME API
+    Then I get a 401 UNAUTHORIZED response
