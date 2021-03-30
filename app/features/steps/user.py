@@ -14,6 +14,14 @@ GENERIC_EMAIL = "email@domain.co.jp"
 GENERIC_PASSWORD = "pass123"
 
 
+def create_user(context, email=GENERIC_EMAIL, password=GENERIC_PASSWORD):
+    user = get_user_model().objects.create_user(
+        email=email,
+        password=password,
+    )
+    context.user = user
+
+
 @when("a user has been created with the following details:")
 @when("a user has been created with the following details")
 def step_impl(context):
@@ -21,11 +29,7 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     email, user, password = context.table.rows[0]
-    user = get_user_model().objects.create_user(
-        email=email,
-        password=password,
-    )
-    context.user = user
+    create_user(context, email, password)
 
 
 @then('A user "user" is created with the following info:')
@@ -196,3 +200,11 @@ def step_impl(context, email, password):
     user = get_user_model().objects.filter(email=email).first()
 
     context.test_case.assertTrue(user.check_password(password))
+
+
+@given("I have a user")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    create_user(context)

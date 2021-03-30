@@ -1,6 +1,7 @@
 from behave import (
     when,
     then,
+    step,
     use_step_matcher
 )
 from django.urls import reverse
@@ -59,3 +60,11 @@ def step_impl(context):
     """
     context.test_case.assertEqual(context.url_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED,
                                   "Expected 405 METHOD NOT ALLOWED, but got %d" % context.url_response.status_code)
+
+
+@step("My test client is authenticated for my user")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    context.test_client.force_authenticate(context.user)
