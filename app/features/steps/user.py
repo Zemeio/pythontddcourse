@@ -129,3 +129,49 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     assert context.user.is_staff, "User is not a staff"
+
+
+@given("I have the following users:")
+@given("I have the following users")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    if not hasattr(context, "users"):
+        context.users = {}
+    for email, user, password in context.table.rows:
+        new_user = get_user_model().objects.create_user(
+            email=email,
+            password=password,
+        )
+        context.users[email] = new_user
+
+
+@step("The user exists in my model")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    user = get_user_model().objects.get(**context.url_response.data)
+    assert user is not None,\
+        "User does not exist in the model"
+    context.user = user
+
+
+@step('User password is "{password}"')
+def step_impl(context, password):
+    """
+    :type context: behave.runner.Context
+    """
+    context.user.check_password(password)
+
+
+@step('The user {email} does not exist in my model')
+def step_impl(context, email):
+    """
+    :type context: behave.runner.Context
+    """
+    user_exists = get_user_model().objects.filter(
+        email=email
+    ).exists()
+    context.test_case.assertFalse(user_exists, "User should not exist %s" % email)
