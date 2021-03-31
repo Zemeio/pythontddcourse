@@ -41,7 +41,8 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    assert context.url_response.status_code == 200
+    context.test_case.assertEqual(context.url_response.status_code, status.HTTP_200_OK,
+                                  "Expected 200 OK, but got %d" % context.url_response.status_code)
 
 
 @when("I access the create user page")

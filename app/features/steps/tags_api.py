@@ -49,3 +49,29 @@ def step_impl(context, tagname):
     """
     data = context.url_response.data
     context.test_case.assertEquals(data[0]["name"], tagname)
+
+
+@when("I call the tag API with the following payload:")
+@when("I call the tag API with the following payload")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    tag_name = context.table.rows[0][0]
+    payload = {
+        "name": tag_name
+    }
+
+    context.url_response = context.test_client.post(TAGS_URL, payload)
+
+
+@when("I call the tag API with an empty name")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    payload = {
+        "name": "",
+    }
+
+    context.url_response = context.test_client.post(TAGS_URL, payload)

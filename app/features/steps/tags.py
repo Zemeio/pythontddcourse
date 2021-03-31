@@ -7,6 +7,7 @@ from behave import (
 )
 
 from core import models
+from core.models import Tag
 
 use_step_matcher("cfparse")
 
@@ -52,3 +53,16 @@ def step_impl(context, tagname, email):
     """
     user = context.users[email]
     create_tag(context, tagname, user)
+
+
+@step('Tag with name "{tagname}" exists in the database for my user')
+def step_impl(context, tagname):
+    """
+    :type context: behave.runner.Context
+    """
+    exists = Tag.objects.filter(
+        user=context.user,
+        name=tagname,
+    ).exists()
+
+    context.test_case.assertTrue(exists)

@@ -1,5 +1,5 @@
-@wip
-Feature: Tests from recipe that require authentication
+Feature: Tests from tags that require authentication
+
   Background:
 
     Given I have a user
@@ -23,3 +23,15 @@ Feature: Tests from recipe that require authentication
     Then I get a 200 OK response
     And The response contains "1" key
     And the tag "Vegan" is returned in the response
+
+  Scenario: Create tag should return success
+    When I call the tag API with the following payload:
+      | name     |
+      | Test Tag |
+    Then I get a 201 CREATED response
+    And Tag with name "Test Tag" exists in the database for my user
+
+  Scenario: Create tag should fail for empty name
+    When I call the tag API with an empty name
+    Then I get a 400 BAD REQUEST response
+
