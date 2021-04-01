@@ -2,6 +2,7 @@ from behave import (
     use_step_matcher,
     when,
     step,
+    then,
 )
 from rest_framework.reverse import reverse
 
@@ -41,3 +42,39 @@ def step_impl(context, ingredient_name):
     """
     data = context.url_response.data
     context.test_case.assertEquals(data[0]["name"], ingredient_name)
+
+
+@when("I call the Ingredient API with the following payload:")
+@when("I call the Ingredient API with the following payload")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    payload = {
+        "name": context.table.rows[0][0],
+    }
+    context.url_response = context.test_client.post(INGREDIENTS_URL, payload)
+
+
+@then('Ingredient with name "{ingredient_name}" exists in the database for my user')
+def step_impl(context, ingredient_name):
+    """
+    :type ingredient_name: str
+    :type context: behave.runner.Context
+    """
+    exists = Ingredient.objects.filter(
+        user=context.user,
+        name=ingredient_name,
+    ).exists()
+    context.test_case.assertTrue(exists)
+
+
+@when("I call the Ingredient API with an empty name")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    payload = {
+        "name": "",
+    }
+    context.url_response = context.test_client.post(INGREDIENTS_URL, payload)
