@@ -23,14 +23,12 @@ Feature: Test ingredient API that require authorization
     And The response contains "1" key
     And the ingredient "Salt" is returned in the response
 
-  @wip
   Scenario: Create Ingredient should create ingredients for the authenticated user
     When I call the Ingredient API with the following payload:
       | name |
       | Salt |
     Then Ingredient with name "Salt" exists in the database for my user
 
-  @wip
   Scenario: Create Ingredient should fail for empty ingredient name
     When I call the Ingredient API with an empty name
     Then I get a 400 BAD REQUEST response
