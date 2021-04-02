@@ -1,4 +1,3 @@
-@wip
 Feature: Recipe models tests
 
   Background:

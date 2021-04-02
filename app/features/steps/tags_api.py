@@ -20,7 +20,6 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     context.url_response = context.test_client.get(TAGS_URL)
-    pass
 
 
 @step("All of my tags are in the response ordered by name")
