@@ -20,6 +20,7 @@ def create_tag(context, tagname="Vegan", user=None):
         name=tagname
     )
     context.tag = tag
+    return tag
 
 
 @when('I create a tag named "{tagname}"')
@@ -44,6 +45,16 @@ def step_impl(context, tagname):
     :type context: behave.runner.Context
     """
     create_tag(context, tagname=tagname)
+
+
+@given('Recipe "{recipename}" has a tag named "{tagname}"')
+def step_impl(context, recipename, tagname):
+    """
+    :type context: behave.runner.Context
+    """
+    recipe = next(i for i in context.recipes if i.title == recipename)
+    tag = create_tag(context, tagname=tagname)
+    recipe.tags.add(tag)
 
 
 @step('I have a tag "{tagname}" for the user "{email}"')

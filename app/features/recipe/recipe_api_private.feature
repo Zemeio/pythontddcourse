@@ -1,4 +1,3 @@
-@wip
 Feature: Test recipe API
 
   Background:

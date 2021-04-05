@@ -16,10 +16,24 @@ def step_impl(context, ingredient_name):
     :type ingredient_name: str
     :type context: behave.runner.Context
     """
+    create_ingredient(context, ingredient_name)
+
+
+def create_ingredient(context, ingredient_name="Salt"):
     context.ingredient = models.Ingredient.objects.create(
         user=context.user,
         name=ingredient_name,
     )
+    return context.ingredient
+
+
+@step('Recipe "{recipename}" has an ingredient named "{ingredient_name}"')
+def step_impl(context, recipename, ingredient_name):
+    """
+    :type context: behave.runner.Context
+    """
+    recipe = next(i for i in context.recipes if i.title == recipename)
+    recipe.tags.add(create_ingredient(context, ingredient_name=ingredient_name))
 
 
 @when("I take the string representation of my ingredient")
